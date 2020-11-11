@@ -1,0 +1,51 @@
+.login{
+    width: 600px;
+    margin: 0 auto;
+    background-color: #ccc;
+    padding: 25px;
+    text-align: center;
+    border: 2px solid #000;
+    border-radius: 10px;
+    font-size: 20pt;
+    box-shadow: 10px 10px 10px #333;
+    height: 48%;
+    margin-top: 100px;
+    display: none;
+}
+
+  .input{
+    font-size: 15pt;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .chat{
+    width: 1000px;
+    margin: 0 auto;
+    background-color: #ccc;
+    padding: 25px;
+    text-align: center;
+    border: 2px solid #000;
+    border-radius: 10px;
+    font-size: 20pt;
+    box-shadow: 18px 10px 10px #333;
+    height: 90%;
+    display: none;
+  }
+  
+  .chat-mensajes{
+  width: 100%;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 10px;
+  text-align: left;
+  height: 520px;
+}
+
+.chat-escribir {
+  margin-top: 10px;
+}
+
+input[id=text-mensaje]{
+  width: 92%;
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>chat Konecta</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="chat.css" rel="stylesheet" type="text/css">
+  </head>
+  <style>
+    .login{
+    width: 600px;
+    margin: 0 auto;
+    background-color: #ccc;
+    padding: 25px;
+    text-align: center;
+    border: 2px solid #000;
+    border-radius: 10px;
+    font-size: 20pt;
+    box-shadow: 10px 10px 10px #333;
+    height: 48%;
+    margin-top: 100px;
+    display: none;
+    }
+
+    .input{
+      font-size: 15pt;
+      padding: 10px;
+      border-radius: 10px;
+      float: left;
+    }
+
+    .chat{
+      width: 1000px;
+      margin: 0 auto;
+      background-color: #ccc;
+      padding: 25px;
+      text-align: center;
+      border: 2px solid #000;
+      border-radius: 10px;
+      font-size: 20pt;
+      box-shadow: 18px 10px 10px #333;
+      height: 90%;
+      display: none;
+    }
+    
+    .chat-mensajes{
+    width: 70%;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    text-align: left;
+    height: 520px;
+    float: left;
+  }
+
+  .usr-conectadas{
+    width: 25%;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    text-align: left;
+    height: 520px;
+    float: right;
+  }
+
+  .chat-escribir {
+    margin-top: 10px;
+  }
+
+  input[id=text-mensaje]{
+    width: 70%;
+    float: left;
+    margin-top: 10px;
+  }
+
+  </style>
+  <body>
+    <div id="login" class="login">
+      <h3>Ingrese su nombre:</h3>
+      <input type="text" id="username" />
+      <br /><br />
+      <input type="button" value="Ingresar al chat" id="button-ingresar" />
+    </div>
+
+    <div id="chat" class="chat">
+      <div class="chat-mensajes" id="chat-mensajes">
+        Bienvenido al chat! <br />
+      </div>
+
+      <div class="usr-conectadas" id="usr-conectadas">
+        Usuarios! <br />
+      </div>
+
+      <div class="chat-escribir" id="chat-escribir">
+        <input type="text" class="text-mensaje" id="text-mensaje" />
+        <input type="button" value="Enviar" class="button-enviar" id="button-enviar" />
+      </div> 
+    </div>
+  </body>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  var socket = io();
+
+  $(document).ready(function(){
+    $('#login').fadeIn(500);
+  });
+
+  $('#button-ingresar').click(function()
+  {
+    var username = $('#username').val();
+
+    if (username == ''){
+      alert('Debes escribir tu nombre');
+    }
+    else{
+      socket.emit('crearUsuario', username);
+      socket.emit('peopleConectadas', username)
+      var personConectadas = '<b>' + username + ' </b>';
+      $('#usr-conectadas').append(personConectadas + '<br />');
+      
+      $('#login').fadeOut(500, function()
+      {
+        $('#chat').fadeIn(500);
+      });
+    }
+  });
+
+
+  $('#text-mensaje').keypress(function(event)
+  {
+    if (event.which == 13){
+      $('#button-enviar').click()
+    }
+  });
+
+  $('#button-enviar').click(function()
+  {
+    var mensaje = $('#text-mensaje').val();
+    if (mensaje != ''){
+      $('#text-mensaje').val('');
+      socket.emit('mensajeNuevo', mensaje)
+    }
+  });
+
+  socket.on('mensaje', function(data){
+    var nuevoMensaje = '<b>' + data.usuario + ': </b>' + data.mensaje;
+    $('#chat-mensajes').append(nuevoMensaje + '<br />');
+  });
+
+  socket.on('username', function(data){
+    var personConectadas = '<b>' + data.usuario + ': </b>';
+    $('#usr-conectadas').append(personConectadas + '<br />');
+  });
+  </script>
+
+</html>
